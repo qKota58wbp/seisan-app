@@ -176,7 +176,7 @@ function renderExpenseList() {
         // コンテンツを含むコンテナ要素
         const contentDiv = document.createElement('div');
         contentDiv.className = 'expense-content';
-        contentDiv.textContent = `${expense.description}: ${expense.amount}円 (支払者: ${expense.payer})`;
+        contentDiv.textContent = `${expense.description}: ${expense.amount.toLocaleString()}円 (支払者: ${expense.payer})`;
         li.appendChild(contentDiv);
         
         // 削除ボタンを追加
@@ -193,7 +193,7 @@ function removeExpense(indexToRemove) {
     const expense = expenses[indexToRemove];
     
     // 確認ダイアログを表示（モバイルでも操作ミスを防止）
-    if (confirm(`${expense.description}（${expense.amount}円）を削除しますか？`)) {
+    if (confirm(`${expense.description}（${expense.amount.toLocaleString()}円）を削除しますか？`)) {
         expenses.splice(indexToRemove, 1);
         renderExpenseList();
         resultArea.style.display = 'none'; // 結果表示を隠す
@@ -250,8 +250,8 @@ function calculateFinalSettlement() {
         const li = document.createElement('li');
         const balance = balances[p];
         const balanceText = balance >= 0
-            ? `+${Math.round(balance)} 円 (受け取り)`
-            : `${Math.round(balance)} 円 (支払い)`;
+            ? `+${Math.round(balance).toLocaleString()} 円 (受け取り)`
+            : `${Math.round(balance).toLocaleString()} 円 (支払い)`;
         li.textContent = `${p}: ${balanceText}`;
         // プラスかマイナスかでクラスを付与して色分け
         li.classList.add(balance >= 0 ? 'positive' : 'negative');
@@ -259,7 +259,7 @@ function calculateFinalSettlement() {
     });
 
     // --- 概要を表示 ---
-    summaryTextElement.textContent = `合計金額: ${Math.round(totalAmount)}円 / 一人あたり: ${Math.round(amountPerPerson)}円`;
+    summaryTextElement.textContent = `合計金額: ${Math.round(totalAmount).toLocaleString()}円 / 一人あたり: ${Math.round(amountPerPerson).toLocaleString()}円`;
 
     // --- 3. 支払い（精算）を計算 (Debt Simplification Algorithm) ---
     const transactions = calculateTransactions(balances);
@@ -277,7 +277,7 @@ function calculateFinalSettlement() {
             const roundedAmount = Math.round(t.amount);
             // 丸めた結果0円になった取引は表示しない
             if (roundedAmount > 0) {
-                li.textContent = `${t.from} が ${t.to} に ${roundedAmount} 円支払う`;
+                li.textContent = `${t.from} が ${t.to} に ${roundedAmount.toLocaleString()} 円支払う`;
                 transactionListElement.appendChild(li);
             }
         });
