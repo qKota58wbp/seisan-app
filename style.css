@@ -1,0 +1,308 @@
+/* モバイル最適化のためのCSSを追加 */
+
+/* 基本スタイル - スマホ対応 */
+body {
+    padding: 10px; /* スマホでは余白を小さく */
+}
+
+.container {
+    max-width: 100%; /* 幅を100%に */
+    margin: 10px auto; /* マージンを小さく */
+    padding: 15px 20px; /* パディングを縮小 */
+}
+
+/* 入力グループのモバイル対応 */
+.input-group {
+    flex-direction: column; /* スマホでは縦方向に並べる */
+    align-items: stretch; /* 要素を横幅いっぱいに */
+    gap: 8px; /* 要素間のスペースを調整 */
+}
+
+.input-group.multi-column > div {
+    width: 100%; /* 幅を100%に */
+    min-width: auto; /* 最小幅の制限を解除 */
+}
+
+/* 参加者追加部分のみ特別処理 */
+@media (min-width: 480px) {
+    .input-group:has(#participantName) {
+        flex-direction: row; /* 横並びに戻す */
+    }
+}
+
+/* ボタンのモバイル調整 */
+button {
+    margin-left: 0; /* 左マージンをリセット */
+    width: 100%; /* 横幅いっぱいに */
+    padding: 12px 15px; /* タップしやすいサイズに */
+    margin-top: 5px; /* 上に少し余白 */
+    font-size: 16px; /* フォントサイズを大きめに */
+}
+
+#addParticipantButton, 
+#addExpenseButton {
+    margin-top: 8px; /* ボタンの上部にスペース */
+}
+
+/* リストアイテムのモバイル調整 */
+#participantList li,
+#expenseList li,
+#balanceList li,
+#transactionList li {
+    padding: 10px 12px; /* パディングを大きく */
+    font-size: 16px; /* フォントサイズを大きめに */
+    word-break: break-all; /* 長い文字列の折り返し */
+}
+
+/* 削除ボタンを大きくしてタップしやすく */
+.delete-btn {
+    width: 30px; /* 幅を大きく */
+    height: 30px; /* 高さを大きく */
+    line-height: 30px; /* 行の高さも合わせる */
+    font-size: 1.1em; /* フォントサイズを大きく */
+    margin-left: 15px; /* 左マージンを増やす */
+}
+
+/* iPhoneのSafariでの入力フィールドのスタイル修正 */
+input, select {
+    -webkit-appearance: none; /* Safariのデフォルトスタイルを削除 */
+    font-size: 16px; /* 16px以上でズームを防止 */
+    padding: 12px 10px; /* タップしやすいサイズに */
+}
+
+/* 入力フォーカス時のスタイル */
+input:focus, select:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+}
+
+/* メディアクエリ - モバイルデバイス向け */
+@media screen and (max-width: 480px) {
+    h1 {
+        font-size: 1.8em; /* タイトルを少し小さく */
+    }
+    
+    h2 {
+        font-size: 1.3em; /* 見出しを少し小さく */
+    }
+    
+    .section {
+        margin-bottom: 20px; /* セクション間のマージンを小さく */
+        padding-bottom: 15px;
+    }
+    
+    /* 長いテキストの処理 */
+    #expenseList li {
+        flex-wrap: wrap; /* 長いテキストは折り返す */
+    }
+    
+    /* 削除ボタンの配置 */
+    #participantList li .delete-btn,
+    #expenseList li .delete-btn {
+        margin-left: auto; /* 右端に配置 */
+    }
+}
+
+/* 基本スタイル */
+body {
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    line-height: 1.6;
+    background-color: #f8f9fa;
+    margin: 0;
+    padding: 20px;
+}
+
+.container {
+    max-width: 700px;
+    margin: 20px auto;
+    background-color: #ffffff;
+    padding: 25px 40px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+h1, h2, h3 {
+    color: #343a40;
+    margin-bottom: 0.8em;
+}
+h1 {
+    text-align: center;
+    color: #0056b3; /* 少し濃い青 */
+    margin-bottom: 1.2em;
+}
+h2 {
+    border-bottom: 2px solid #007bff;
+    padding-bottom: 8px;
+    margin-top: 1.5em;
+    color: #495057;
+}
+h3 {
+    margin-top: 1.2em;
+    color: #6c757d;
+}
+
+/* セクション区切り */
+.section {
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #dee2e6;
+}
+.section:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+/* 入力グループ */
+.input-group {
+    display: flex;
+    align-items: center; /* 要素を垂直方向中央揃えに */
+    margin-bottom: 15px;
+    gap: 10px; /* 要素間のスペース */
+    flex-wrap: wrap; /* 画面幅が狭い場合に折り返す */
+}
+.input-group.multi-column {
+    gap: 15px; /* 少し広めのスペース */
+}
+.input-group.multi-column > div {
+    flex: 1; /* 各要素が均等に幅を取る */
+    min-width: 150px; /* 最小幅を設定 */
+}
+
+.input-group label {
+    margin-bottom: 5px;
+    color: #495057;
+    font-weight: 500;
+    display: block; /* ラベルをブロック要素に */
+}
+
+.input-group input[type="text"],
+.input-group input[type="number"],
+.input-group select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ced4da;
+    border-radius: 5px;
+    font-size: 1em;
+    box-sizing: border-box;
+}
+.input-group input[type="text"]#participantName {
+     flex-grow: 2; /* 名前入力欄を少し広げる */
+}
+
+/* ボタン */
+button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 18px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+    margin-left: 5px; /* ボタンの左に少しスペース */
+}
+button:hover {
+    background-color: #0056b3;
+}
+button:active {
+    transform: translateY(1px); /* クリック時に少し沈む */
+}
+/* 大きいボタン */
+#calculateButton {
+    display: block; /* ブロック要素にして幅いっぱい */
+    width: 100%;
+    font-size: 1.2em;
+    padding: 12px;
+    margin-top: 10px;
+    margin-left: 0; /* 左マージンをリセット */
+}
+.reset-button {
+    background-color: #dc3545; /* 赤色 */
+    margin-top: 20px;
+    display: block;
+    width: auto; /* 幅は自動 */
+    margin-left: auto; /* 右寄せ */
+    margin-right: auto; /* 中央寄せ */
+}
+.reset-button:hover {
+    background-color: #c82333;
+}
+
+
+/* リスト */
+ul {
+    list-style: none; /* 点を消す */
+    padding-left: 0;
+    margin-top: 10px;
+}
+#participantList li,
+#expenseList li,
+#balanceList li,
+#transactionList li {
+    background-color: #e9ecef;
+    padding: 8px 12px;
+    margin-bottom: 5px;
+    border-radius: 4px;
+    font-size: 0.95em;
+    color: #495057;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+#participantList li:first-child { /* ヘッダー用 */
+    background-color: transparent;
+    font-weight: bold;
+    color: #6c757d;
+    padding-left: 0;
+}
+
+/* 削除ボタン（リスト内） */
+.delete-btn {
+    background-color: #ffc107; /* 黄色 */
+    color: #333;
+    border: none;
+    border-radius: 50%; /* 丸くする */
+    cursor: pointer;
+    font-size: 0.8em;
+    width: 20px; /* 幅 */
+    height: 20px; /* 高さ */
+    line-height: 20px; /* 文字を中央揃え */
+    text-align: center;
+    padding: 0;
+    margin-left: 10px;
+    transition: background-color 0.2s ease;
+}
+.delete-btn:hover {
+    background-color: #e0a800;
+}
+
+/* 結果表示エリア */
+.result-section {
+    background-color: #f0faff; /* 薄い青色 */
+    border: 1px solid #bde0fe;
+    padding: 20px;
+    border-radius: 8px;
+    margin-top: 25px;
+}
+#summaryText {
+    font-weight: bold;
+    font-size: 1.1em;
+    color: #0056b3;
+}
+#balanceList li.positive { /* プラス収支 */
+    color: #155724; /* 緑色 */
+    background-color: #d4edda; /* 薄い緑 */
+    border-left: 5px solid #28a745; /* 左に緑の線 */
+}
+#balanceList li.negative { /* マイナス収支 */
+    color: #721c24; /* 赤色 */
+    background-color: #f8d7da; /* 薄い赤 */
+    border-left: 5px solid #dc3545; /* 左に赤の線 */
+}
+#transactionList li {
+    background-color: #d1ecf1; /* 薄いシアン */
+    border-left: 5px solid #0dcaf0; /* 左にシアンの線 */
+    font-weight: 500;
+}
