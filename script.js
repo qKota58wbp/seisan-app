@@ -259,7 +259,8 @@ function calculateFinalSettlement() {
     });
 
     // --- 概要を表示 ---
-    summaryTextElement.textContent = `合計金額: ${Math.round(totalAmount).toLocaleString()}円 / 一人あたり: ${Math.round(amountPerPerson).toLocaleString()}円`;
+    // 改行を入れて「合計金額」と「一人あたり」を別行で表示
+    summaryTextElement.innerHTML = `合計金額: ${Math.round(totalAmount).toLocaleString()}円<br>一人あたり: ${Math.round(amountPerPerson).toLocaleString()}円`;
 
     // --- 3. 支払い（精算）を計算 (Debt Simplification Algorithm) ---
     const transactions = calculateTransactions(balances);
