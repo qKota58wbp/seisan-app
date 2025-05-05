@@ -6,9 +6,10 @@ body {
 }
 
 .container {
-    max-width: 100%; /* 幅を100%に */
-    margin: 10px auto; /* マージンを小さく */
-    padding: 15px 20px; /* パディングを縮小 */
+    max-width: 100%;
+    margin: 10px auto;
+    padding: 10px 15px;
+    box-shadow: none; /* スマホでは影を省略してシンプルにすることも可 */
 }
 
 /* 入力グループのモバイル対応 */
@@ -49,9 +50,8 @@ button {
 #expenseList li,
 #balanceList li,
 #transactionList li {
-    padding: 10px 12px; /* パディングを大きく */
-    font-size: 16px; /* フォントサイズを大きめに */
-    word-break: break-all; /* 長い文字列の折り返し */
+    font-size: 0.9em;
+    padding: 8px 10px;
 }
 
 /* 削除ボタンを大きくしてタップしやすく */
@@ -112,7 +112,9 @@ body {
     margin: 0;
     padding: 20px;
 }
-
+body {
+    font-size: 15px;
+}
 .container {
     max-width: 700px;
     margin: 20px auto;
@@ -280,11 +282,10 @@ ul {
 
 /* 結果表示エリア */
 .result-section {
-    background-color: #f0faff; /* 薄い青色 */
-    border: 1px solid #bde0fe;
-    padding: 20px;
-    border-radius: 8px;
-    margin-top: 25px;
+    background-color: transparent;
+    border: none;
+    padding: 0;
+    margin-top: 20px;
 }
 #summaryText {
     font-weight: bold;
