@@ -4,66 +4,71 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>割り勘 精算アプリ</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
     <div class="container">
-        <h1>割り勘 精算アプリ</h1>
+        <header class="app-header">
+            <h1>スマート割り勘</h1>
+            <p>旅行やイベントの支払いをスマートに精算</p>
+        </header>
 
-        <div class="section">
-            <h2>1. 参加者を追加</h2>
-            <div class="input-group participant-input">
-                <label for="participantName">名前:</label>
+        <section class="card">
+            <h2><i class="fas fa-users"></i> 参加者を追加</h2>
+            <div class="input-group">
                 <input type="text" id="participantName" placeholder="例: 鈴木" autocomplete="off">
-                <button id="addParticipantButton">追加</button>
+                <button id="addParticipantButton" class="btn-primary"><i class="fas fa-plus"></i> 追加</button>
             </div>
-            <ul id="participantList">
-                <li>参加者リスト:</li>
-            </ul>
-        </div>
+            <ul id="participantList" class="item-list"></ul>
+        </section>
 
-        <div class="section">
-            <h2>2. 支払い情報を追加</h2>
-            <div class="input-group multi-column">
-                <div>
+        <section class="card">
+            <h2><i class="fas fa-wallet"></i> 支払い情報を追加</h2>
+            <div class="input-grid">
+                <div class="form-group">
                     <label for="payer">支払った人:</label>
                     <select id="payer">
                         <option value="">--選択してください--</option>
                     </select>
                 </div>
-                <div>
+                <div class="form-group">
                     <label for="amount">金額 (円):</label>
-                    <input type="number" id="amount" placeholder="例: 1000" inputmode="numeric">
+                    <input type="number" id="amount" placeholder="例: 3000" inputmode="numeric">
                 </div>
-                <div>
+                <div class="form-group full-width">
                     <label for="description">内容:</label>
-                    <input type="text" id="description" placeholder="例: 高速代" autocomplete="off">
+                    <input type="text" id="description" placeholder="例: ランチ代" autocomplete="off">
                 </div>
             </div>
-            <button id="addExpenseButton">支払い情報を追加</button>
-            <h3>支払いリスト:</h3>
-            <ul id="expenseList">
-            </ul>
-        </div>
+            <button id="addExpenseButton" class="btn-primary"><i class="fas fa-plus"></i> 支払い情報を追加</button>
+            <h3 class="list-title">支払いリスト:</h3>
+            <ul id="expenseList" class="item-list"></ul>
+        </section>
 
-        <div class="section">
-            <h2>3. 精算計算を実行</h2>
-            <button id="calculateButton">精算する</button>
-        </div>
+        <section class="card">
+            <h2><i class="fas fa-calculator"></i> 精算計算</h2>
+            <button id="calculateButton" class="btn-main"><i class="fas fa-play"></i> 精算する</button>
+        </section>
 
-        <div id="resultArea" class="section result-section" style="display: none;">
-            <h2>精算結果</h2>
-            <p id="summaryText"></p>
-            <h3>各個人の収支:</h3>
-            <ul id="balanceList">
-            </ul>
-            <h3>必要な支払い:</h3>
-            <ul id="transactionList">
-            </ul>
-        </div>
+        <section id="resultArea" class="card result-card" style="display: none;">
+            <h2><i class="fas fa-chart-pie"></i> 精算結果</h2>
+            <div id="summaryText" class="summary-box"></div>
+            
+            <h3 class="list-title">各個人の収支:</h3>
+            <ul id="balanceList" class="item-list"></ul>
+            
+            <h3 class="list-title">必要な支払い:</h3>
+            <ul id="transactionList" class="item-list"></ul>
+        </section>
 
-        <button id="resetButton" class="reset-button">リセット</button>
+        <footer>
+            <button id="resetButton" class="btn-danger"><i class="fas fa-trash-alt"></i> 全てリセット</button>
+        </footer>
 
     </div>
 

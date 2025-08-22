@@ -1,309 +1,256 @@
-/* モバイル最適化のためのCSSを追加 */
+/* --- グローバル設定 & 変数 --- */
+:root {
+    --primary-color: #007bff;
+    --primary-hover: #0056b3;
+    --danger-color: #dc3545;
+    --danger-hover: #c82333;
+    --success-color: #28a745;
+    --warning-color: #ffc107;
+    --light-bg: #f8f9fa;
+    --white: #ffffff;
+    --text-color: #333;
+    --border-color: #dee2e6;
+    --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    --border-radius: 10px;
+}
 
-/* 基本スタイル - スマホ対応 */
+/* --- 基本スタイル --- */
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
 body {
-    padding: 10px; /* スマホでは余白を小さく */
-}
-
-.container {
-    max-width: 100%;
-    margin: 10px auto;
-    padding: 10px 15px;
-    box-shadow: none; /* スマホでは影を省略してシンプルにすることも可 */
-}
-
-/* 入力グループのモバイル対応 */
-.input-group {
-    flex-direction: column; /* スマホでは縦方向に並べる */
-    align-items: stretch; /* 要素を横幅いっぱいに */
-    gap: 8px; /* 要素間のスペースを調整 */
-}
-
-.input-group.multi-column > div {
-    width: 100%; /* 幅を100%に */
-    min-width: auto; /* 最小幅の制限を解除 */
-}
-
-/* 参加者追加部分のみ特別処理 */
-@media (min-width: 480px) {
-    .input-group:has(#participantName) {
-        flex-direction: row; /* 横並びに戻す */
-    }
-}
-
-/* ボタンのモバイル調整 */
-button {
-    margin-left: 0; /* 左マージンをリセット */
-    width: 100%; /* 横幅いっぱいに */
-    padding: 12px 15px; /* タップしやすいサイズに */
-    margin-top: 5px; /* 上に少し余白 */
-    font-size: 16px; /* フォントサイズを大きめに */
-}
-
-#addParticipantButton, 
-#addExpenseButton {
-    margin-top: 8px; /* ボタンの上部にスペース */
-}
-
-/* リストアイテムのモバイル調整 */
-#participantList li,
-#expenseList li,
-#balanceList li,
-#transactionList li {
-    font-size: 0.9em;
-    padding: 8px 10px;
-}
-
-/* 削除ボタンを大きくしてタップしやすく */
-.delete-btn {
-    width: 30px; /* 幅を大きく */
-    height: 30px; /* 高さを大きく */
-    line-height: 30px; /* 行の高さも合わせる */
-    font-size: 1.1em; /* フォントサイズを大きく */
-    margin-left: 15px; /* 左マージンを増やす */
-}
-
-/* iPhoneのSafariでの入力フィールドのスタイル修正 */
-input, select {
-    -webkit-appearance: none; /* Safariのデフォルトスタイルを削除 */
-    font-size: 16px; /* 16px以上でズームを防止 */
-    padding: 12px 10px; /* タップしやすいサイズに */
-}
-
-/* 入力フォーカス時のスタイル */
-input:focus, select:focus {
-    outline: none;
-    border-color: #007bff;
-    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
-}
-
-/* メディアクエリ - モバイルデバイス向け */
-@media screen and (max-width: 480px) {
-    h1 {
-        font-size: 1.8em; /* タイトルを少し小さく */
-    }
-    
-    h2 {
-        font-size: 1.3em; /* 見出しを少し小さく */
-    }
-    
-    .section {
-        margin-bottom: 20px; /* セクション間のマージンを小さく */
-        padding-bottom: 15px;
-    }
-    
-    /* 長いテキストの処理 */
-    #expenseList li {
-        flex-wrap: wrap; /* 長いテキストは折り返す */
-    }
-    
-    /* 削除ボタンの配置 */
-    #participantList li .delete-btn,
-    #expenseList li .delete-btn {
-        margin-left: auto; /* 右端に配置 */
-    }
-}
-
-/* 基本スタイル */
-body {
-    font-family: 'Helvetica Neue', Arial, sans-serif;
+    font-family: 'Noto Sans JP', 'Helvetica Neue', Arial, sans-serif;
     line-height: 1.6;
-    background-color: #f8f9fa;
+    background-color: var(--light-bg);
     margin: 0;
-    padding: 20px;
+    color: var(--text-color);
+    font-size: 16px;
+    -webkit-tap-highlight-color: transparent;
 }
-body {
-    font-size: 15px;
-}
+
 .container {
-    max-width: 700px;
-    margin: 20px auto;
-    background-color: #ffffff;
-    padding: 25px 40px;
-    border-radius: 10px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 15px;
 }
 
 h1, h2, h3 {
-    color: #343a40;
-    margin-bottom: 0.8em;
+    margin: 0 0 0.8em 0;
 }
-h1 {
+
+i {
+    margin-right: 0.5em;
+}
+
+/* --- ヘッダー --- */
+.app-header {
     text-align: center;
-    color: #0056b3; /* 少し濃い青 */
-    margin-bottom: 1.2em;
+    margin-bottom: 25px;
+    color: var(--primary-color);
 }
-h2 {
-    border-bottom: 2px solid #007bff;
-    padding-bottom: 8px;
-    margin-top: 1.5em;
-    color: #495057;
+.app-header h1 {
+    font-size: 2.2em;
+    font-weight: 700;
+    margin-bottom: 0.2em;
 }
-h3 {
-    margin-top: 1.2em;
+.app-header p {
+    font-size: 1em;
     color: #6c757d;
+    margin: 0;
 }
 
-/* セクション区切り */
-.section {
-    margin-bottom: 30px;
-    padding-bottom: 20px;
-    border-bottom: 1px solid #dee2e6;
+/* --- カードスタイル --- */
+.card {
+    background-color: var(--white);
+    padding: 20px;
+    border-radius: var(--border-radius);
+    margin-bottom: 20px;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border-color);
 }
-.section:last-child {
-    border-bottom: none;
-    margin-bottom: 0;
-    padding-bottom: 0;
+.card h2 {
+    font-size: 1.4em;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border-color);
+    margin-bottom: 20px;
+    color: var(--primary-color);
 }
 
-/* 入力グループ */
+/* --- フォーム & 入力グループ --- */
 .input-group {
     display: flex;
-    align-items: center; /* 要素を垂直方向中央揃えに */
+    gap: 10px;
     margin-bottom: 15px;
-    gap: 10px; /* 要素間のスペース */
-    flex-wrap: wrap; /* 画面幅が狭い場合に折り返す */
 }
-.input-group.multi-column {
-    gap: 15px; /* 少し広めのスペース */
+.input-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-bottom: 15px;
 }
-.input-group.multi-column > div {
-    flex: 1; /* 各要素が均等に幅を取る */
-    min-width: 150px; /* 最小幅を設定 */
+.form-group.full-width {
+    grid-column: 1 / -1;
 }
-
-.input-group label {
+.form-group label {
+    display: block;
     margin-bottom: 5px;
-    color: #495057;
     font-weight: 500;
-    display: block; /* ラベルをブロック要素に */
+    font-size: 0.9em;
 }
 
-.input-group input[type="text"],
-.input-group input[type="number"],
-.input-group select {
+input[type="text"], input[type="number"], select {
     width: 100%;
-    padding: 10px;
-    border: 1px solid #ced4da;
-    border-radius: 5px;
-    font-size: 1em;
-    box-sizing: border-box;
+    padding: 12px;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    font-size: 16px; /* iOSのズーム防止 */
+    -webkit-appearance: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
 }
-.input-group input[type="text"]#participantName {
-     flex-grow: 2; /* 名前入力欄を少し広げる */
+input:focus, select:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.2);
 }
 
-/* ボタン */
+/* --- ボタン --- */
 button {
-    background-color: #007bff;
-    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
     border: none;
-    padding: 10px 18px;
-    border-radius: 5px;
+    padding: 12px 15px;
+    border-radius: 6px;
     cursor: pointer;
     font-size: 1em;
-    transition: background-color 0.2s ease, transform 0.1s ease;
-    margin-left: 5px; /* ボタンの左に少しスペース */
-}
-button:hover {
-    background-color: #0056b3;
+    font-weight: 500;
+    transition: background-color 0.2s, transform 0.1s;
 }
 button:active {
-    transform: translateY(1px); /* クリック時に少し沈む */
+    transform: translateY(1px);
 }
-/* 大きいボタン */
-#calculateButton {
-    display: block; /* ブロック要素にして幅いっぱい */
-    width: 100%;
+.btn-primary {
+    background-color: var(--primary-color);
+    color: var(--white);
+}
+.btn-primary:hover {
+    background-color: var(--primary-hover);
+}
+#addParticipantButton {
+    flex-shrink: 0;
+    width: auto;
+    padding: 12px 20px;
+}
+
+.btn-main {
+    background-color: var(--success-color);
+    color: var(--white);
     font-size: 1.2em;
-    padding: 12px;
-    margin-top: 10px;
-    margin-left: 0; /* 左マージンをリセット */
+    padding: 15px;
 }
-.reset-button {
-    background-color: #dc3545; /* 赤色 */
-    margin-top: 20px;
-    display: block;
-    width: auto; /* 幅は自動 */
-    margin-left: auto; /* 右寄せ */
-    margin-right: auto; /* 中央寄せ */
-}
-.reset-button:hover {
-    background-color: #c82333;
+.btn-main:hover {
+    background-color: #218838;
 }
 
+.btn-danger {
+    background-color: var(--danger-color);
+    color: var(--white);
+}
+.btn-danger:hover {
+    background-color: var(--danger-hover);
+}
 
-/* リスト */
-ul {
-    list-style: none; /* 点を消す */
+/* --- リスト --- */
+.list-title {
+    margin-top: 25px;
+    margin-bottom: 10px;
+    font-size: 1.1em;
+    color: #6c757d;
+}
+.item-list {
+    list-style: none;
     padding-left: 0;
-    margin-top: 10px;
+    margin: 0;
 }
-#participantList li,
-#expenseList li,
-#balanceList li,
-#transactionList li {
-    background-color: #e9ecef;
-    padding: 8px 12px;
-    margin-bottom: 5px;
-    border-radius: 4px;
-    font-size: 0.95em;
-    color: #495057;
+.item-list li {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    padding: 12px 15px;
+    margin-bottom: 8px;
+    border-radius: 6px;
+    background-color: #f1f3f5;
+    animation: fadeIn 0.4s ease;
 }
-#participantList li:first-child { /* ヘッダー用 */
-    background-color: transparent;
-    font-weight: bold;
-    color: #6c757d;
-    padding-left: 0;
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
-/* 削除ボタン（リスト内） */
+.expense-content {
+    flex-grow: 1;
+    word-break: break-all;
+}
+
 .delete-btn {
-    background-color: #ffc107; /* 黄色 */
-    color: #333;
+    background-color: transparent;
+    color: var(--danger-color);
     border: none;
-    border-radius: 50%; /* 丸くする */
-    cursor: pointer;
-    font-size: 0.8em;
-    width: 20px; /* 幅 */
-    height: 20px; /* 高さ */
-    line-height: 20px; /* 文字を中央揃え */
-    text-align: center;
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    min-width: 36px;
+    font-size: 1.2em;
     padding: 0;
     margin-left: 10px;
-    transition: background-color 0.2s ease;
+    transition: background-color 0.2s, color 0.2s;
 }
 .delete-btn:hover {
-    background-color: #e0a800;
+    background-color: #f8d7da;
+    color: var(--danger-hover);
+}
+.delete-btn .fa-trash-alt {
+    margin: 0;
 }
 
-/* 結果表示エリア */
-.result-section {
-    background-color: transparent;
-    border: none;
-    padding: 0;
-    margin-top: 20px;
+/* --- 結果表示エリア --- */
+.result-card {
+    border-color: var(--primary-color);
 }
-#summaryText {
-    font-weight: bold;
+.summary-box {
     font-size: 1.1em;
-    color: #0056b3;
-}
-#balanceList li.positive { /* プラス収支 */
-    color: #155724; /* 緑色 */
-    background-color: #d4edda; /* 薄い緑 */
-    border-left: 5px solid #28a745; /* 左に緑の線 */
-}
-#balanceList li.negative { /* マイナス収支 */
-    color: #721c24; /* 赤色 */
-    background-color: #f8d7da; /* 薄い赤 */
-    border-left: 5px solid #dc3545; /* 左に赤の線 */
-}
-#transactionList li {
-    background-color: #d1ecf1; /* 薄いシアン */
-    border-left: 5px solid #0dcaf0; /* 左にシアンの線 */
     font-weight: 500;
+    background-color: #e7f3ff;
+    padding: 15px;
+    border-radius: 6px;
+    margin-bottom: 20px;
+    text-align: center;
+    line-height: 1.8;
+}
+
+#balanceList li.positive {
+    background-color: #d4edda;
+    border-left: 5px solid var(--success-color);
+    color: #155724;
+}
+#balanceList li.negative {
+    background-color: #f8d7da;
+    border-left: 5px solid var(--danger-color);
+    color: #721c24;
+}
+
+#transactionList li {
+    background-color: #d1ecf1;
+    border-left: 5px solid #0dcaf0;
+    font-weight: 500;
+}
+
+/* --- フッター --- */
+footer {
+    text-align: center;
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border-color);
 }
