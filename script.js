@@ -17,6 +17,7 @@ const summaryTextElement = document.getElementById('summaryText');
 const balanceListElement = document.getElementById('balanceList');
 const transactionListElement = document.getElementById('transactionList');
 const resetButton = document.getElementById('resetButton');
+const shareButton = document.getElementById('shareButton'); // ★★★ 追加 ★★★
 
 // --- イベントリスナーの設定 ---
 addParticipantButton.addEventListener('click', addParticipant);
@@ -28,6 +29,7 @@ participantNameInput.addEventListener('keypress', function(event) {
 addExpenseButton.addEventListener('click', addExpense);
 calculateButton.addEventListener('click', calculateFinalSettlement);
 resetButton.addEventListener('click', resetApp);
+shareButton.addEventListener('click', shareResults); // ★★★ 追加 ★★★
 
 // スマホでの入力フィールドのフォーカス解除イベント追加
 document.querySelectorAll('input, select').forEach(element => {
@@ -331,6 +333,66 @@ function resetApp() {
         participantNameInput.focus();
     }
 }
+
+// ★★★ ここから下の関数をすべて追加 ★★★
+
+/**
+ * 結果を画像として共有する関数
+ */
+async function shareResults() {
+    // 共有ボタンを一時的に無効化し、処理中であることを示す
+    shareButton.disabled = true;
+    shareButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> 画像を作成中...';
+
+    try {
+        // html2canvasを使って結果エリアを画像(Canvas)に変換
+        const canvas = await html2canvas(document.getElementById('resultArea'), {
+            scale: 2, // 高解像度ディスプレイ向けに2倍の解像度で描画
+            useCORS: true,
+            backgroundColor: '#ffffff' // 背景を白に指定
+        });
+
+        // Canvasを画像ファイル(Blob)に変換
+        const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
+        const file = new File([blob], 'seisan-result.png', { type: 'image/png' });
+
+        // Web Share APIが使えるかチェック
+        if (navigator.canShare && navigator.canShare({ files: [file] })) {
+            // モバイルの共有メニューを開く
+            await navigator.share({
+                title: '割り勘の精算結果',
+                text: '精算結果を送ります！',
+                files: [file]
+            });
+        } else {
+            // 使えない場合(PCなど)は画像をダウンロードさせる
+            alert('お使いのブラウザは共有機能に対応していません。\n代わりに画像をダウンロードします。');
+            downloadImage(file);
+        }
+    } catch (error) {
+        console.error('画像の生成または共有に失敗しました:', error);
+        alert('画像の生成または共有中にエラーが発生しました。');
+    } finally {
+        // ボタンの状態を元に戻す
+        shareButton.disabled = false;
+        shareButton.innerHTML = '<i class="fas fa-share-alt"></i> 結果を共有';
+    }
+}
+
+/**
+ * 画像をダウンロードさせる関数 (共有機能の代替)
+ * @param {File} file - ダウンロードする画像ファイル
+ */
+function downloadImage(file) {
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(file);
+    link.download = file.name;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(link.href); // メモリを解放
+}
+
 
 // --- ローカルストレージ対応（セッション保存）---
 function saveToLocalStorage() {
