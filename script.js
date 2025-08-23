@@ -17,7 +17,7 @@ const summaryTextElement = document.getElementById('summaryText');
 const balanceListElement = document.getElementById('balanceList');
 const transactionListElement = document.getElementById('transactionList');
 const resetButton = document.getElementById('resetButton');
-const shareButton = document.getElementById('shareButton'); // ★★★ 追加 ★★★
+const copyButton = document.getElementById('copyButton');
 
 // --- イベントリスナーの設定 ---
 addParticipantButton.addEventListener('click', addParticipant);
@@ -29,7 +29,7 @@ participantNameInput.addEventListener('keypress', function(event) {
 addExpenseButton.addEventListener('click', addExpense);
 calculateButton.addEventListener('click', calculateFinalSettlement);
 resetButton.addEventListener('click', resetApp);
-shareButton.addEventListener('click', shareResults); // ★★★ 追加 ★★★
+copyButton.addEventListener('click', copyResults);
 
 // スマホでの入力フィールドのフォーカス解除イベント追加
 document.querySelectorAll('input, select').forEach(element => {
@@ -334,65 +334,103 @@ function resetApp() {
     }
 }
 
-// ★★★ ここから下の関数をすべて追加 ★★★
-
 /**
- * 結果を画像として共有する関数
+ * 結果をテキストとしてクリップボードにコピーする関数
  */
-async function shareResults() {
-    // 共有ボタンを一時的に無効化し、処理中であることを示す
-    shareButton.disabled = true;
-    shareButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> 画像を作成中...';
+async function copyResults() {
+    // コピーボタンを一時的に無効化し、処理中であることを示す
+    copyButton.disabled = true;
+    copyButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> コピー中...';
 
     try {
-        // html2canvasを使って結果エリアを画像(Canvas)に変換
-        const canvas = await html2canvas(document.getElementById('resultArea'), {
-            scale: 2, // 高解像度ディスプレイ向けに2倍の解像度で描画
-            useCORS: true,
-            backgroundColor: '#ffffff' // 背景を白に指定
-        });
+        // テキスト形式の結果を生成
+        const resultText = generateResultText();
 
-        // Canvasを画像ファイル(Blob)に変換
-        const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
-        const file = new File([blob], 'seisan-result.png', { type: 'image/png' });
-
-        // Web Share APIが使えるかチェック
-        if (navigator.canShare && navigator.canShare({ files: [file] })) {
-            // モバイルの共有メニューを開く
-            await navigator.share({
-                title: '割り勘の精算結果',
-                text: '精算結果を送ります！',
-                files: [file]
-            });
+        // クリップボードAPIを使用してテキストをコピー
+        if (navigator.clipboard && window.isSecureContext) {
+            await navigator.clipboard.writeText(resultText);
+            showCopySuccess();
         } else {
-            // 使えない場合(PCなど)は画像をダウンロードさせる
-            alert('お使いのブラウザは共有機能に対応していません。\n代わりに画像をダウンロードします。');
-            downloadImage(file);
+            // フォールバック：execCommandを使用
+            const textarea = document.createElement('textarea');
+            textarea.value = resultText;
+            document.body.appendChild(textarea);
+            textarea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textarea);
+            showCopySuccess();
         }
     } catch (error) {
-        console.error('画像の生成または共有に失敗しました:', error);
-        alert('画像の生成または共有中にエラーが発生しました。');
+        console.error('コピーに失敗しました:', error);
+        alert('コピーに失敗しました。テキストを選択して手動でコピーしてください。');
     } finally {
         // ボタンの状態を元に戻す
-        shareButton.disabled = false;
-        shareButton.innerHTML = '<i class="fas fa-share-alt"></i> 結果を共有';
+        copyButton.disabled = false;
+        copyButton.innerHTML = '<i class="fas fa-copy"></i> 結果をコピー';
     }
 }
 
 /**
- * 画像をダウンロードさせる関数 (共有機能の代替)
- * @param {File} file - ダウンロードする画像ファイル
+ * テキスト形式の結果を生成する関数
  */
-function downloadImage(file) {
-    const link = document.createElement('a');
-    link.href = URL.createObjectURL(file);
-    link.download = file.name;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    URL.revokeObjectURL(link.href); // メモリを解放
+function generateResultText() {
+    let resultText = '💰 精算結果\n━━━━━━━━━━━━━━━━━━\n';
+    
+    // 概要
+    const summaryElement = document.getElementById('summaryText');
+    const summaryHTML = summaryElement.innerHTML;
+    const totalAmountMatch = summaryHTML.match(/合計金額:<\/strong> ([^<]+)/);
+    const perPersonMatch = summaryHTML.match(/一人あたり:<\/strong> ([^<]+)/);
+    
+    if (totalAmountMatch && perPersonMatch) {
+        resultText += `合計金額: ${totalAmountMatch[1]}\n`;
+        resultText += `一人あたり: ${perPersonMatch[1]}\n`;
+    }
+    
+    resultText += '\n📊 各個人の収支\n━━━━━━━━━━━━━━━━━━\n';
+    
+    // 収支リスト
+    const balanceItems = document.querySelectorAll('#balanceList li');
+    balanceItems.forEach(item => {
+        const text = item.textContent;
+        const isPositive = item.classList.contains('positive');
+        const emoji = isPositive ? '✅' : '❌';
+        resultText += `${emoji} ${text}\n`;
+    });
+    
+    resultText += '\n💸 必要な支払い\n━━━━━━━━━━━━━━━━━━\n';
+    
+    // 支払いリスト
+    const transactionItems = document.querySelectorAll('#transactionList li');
+    if (transactionItems.length === 0 || transactionItems[0].textContent.includes('精算の必要はありません')) {
+        resultText += '精算の必要はありません✨\n';
+    } else {
+        transactionItems.forEach(item => {
+            // HTMLの矢印アイコンを「が」に変換し、読みやすい形式に
+            let text = item.textContent;
+            // 「名前 名前 に」を「名前が名前に」に変換
+            text = text.replace(/^([^\s]+)\s+([^\s]+)\s+に/, '$1 が $2に');
+            resultText += text + '\n';
+        });
+    }
+    
+    return resultText;
 }
 
+/**
+ * コピー成功時の表示
+ */
+function showCopySuccess() {
+    // 一時的に成功メッセージを表示
+    const originalText = copyButton.innerHTML;
+    copyButton.innerHTML = '<i class="fas fa-check"></i> コピー完了！';
+    copyButton.style.backgroundColor = '#28a745';
+    
+    setTimeout(() => {
+        copyButton.innerHTML = originalText;
+        copyButton.style.backgroundColor = '';
+    }, 2000);
+}
 
 // --- ローカルストレージ対応（セッション保存）---
 function saveToLocalStorage() {

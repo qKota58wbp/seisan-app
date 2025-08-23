@@ -12,6 +12,8 @@
     --border-color: #dee2e6;
     --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
     --border-radius: 10px;
+    --copy-color: #6c757d;
+    --copy-hover: #495057;
 }
 
 /* --- 基本スタイル --- */
@@ -162,6 +164,20 @@ button:active {
     background-color: var(--danger-hover);
 }
 
+/* --- コピーボタン --- */
+.btn-copy {
+    background-color: var(--copy-color);
+    color: var(--white);
+    margin-top: 25px;
+}
+.btn-copy:hover {
+    background-color: var(--copy-hover);
+}
+.btn-copy:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
 /* --- リスト --- */
 .list-title {
     margin-top: 25px;
@@ -216,6 +232,25 @@ button:active {
 }
 
 /* --- 結果表示エリア --- */
+/* 精算結果セクション内の要素の余白を調整 */
+#resultArea .list-title {
+    margin-top: 15px; /* 上の余白を減らす */
+    margin-bottom: 5px; /* 下の余白を減らす */
+}
+
+/* 各リスト項目の上下の余白を調整 */
+#resultArea .item-list li {
+    padding-top: 8px; /* 上の余白を減らす */
+    padding-bottom: 8px; /* 下の余白を減らす */
+    margin-bottom: 5px; /* 項目間の余白を減らす */
+}
+
+/* 概要ボックスの余白を調整 */
+.summary-box {
+    padding: 10px; /* 全体の余白を減らす */
+    font-size: 1em; /* 少しフォントを小さくする */
+}
+
 .result-card {
     border-color: var(--primary-color);
 }
@@ -253,20 +288,6 @@ footer {
     margin-top: 30px;
     padding-top: 20px;
     border-top: 1px solid var(--border-color);
-}
-
-/* --- (...既存のCSSは変更なし...) --- */
-
-/* ★★★ 以下を末尾に追加 ★★★ */
-
-/* --- 共有ボタン --- */
-.btn-share {
-    background-color: #17a2b8; /* 少し落ち着いた青緑色 */
-    color: var(--white);
-    margin-top: 25px; /* 上に余白を追加 */
-}
-.btn-share:hover {
-    background-color: #138496;
 }
 
 /* スピナーアニメーション */
